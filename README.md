@@ -3,6 +3,9 @@ openai-structured-output-sample
 
 A sample application to demonstrate how to use [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) in **OpenAI Chat Completions API** _with streaming_, built using [Next.js](https://nextjs.org/docs).
 
+---
+
+**OpenAI Chat Completions API**でストリーミングを使用した[Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/)の利用方法を示すサンプルアプリケーション。[Next.js](https://nextjs.org/docs)で構築されています。
 
 # Motivation
 
@@ -14,6 +17,15 @@ There are two ways to use structured output in the API:
 
 We'll be doing the latter and up the ante with streaming. But how can we stream text if the API output is in JSON format?
 
+---
+
+APIでStructured Outputを使用する方法は2つあります：
+
+1. **ツールスキーマ**：ツールのスキーマに基づいて出力フォーマットを設定します。これは、API自体が特定のフィールドに値を補完または提供する場合に有用です。
+
+2. **レスポンスフォーマット**：`response_format`という新しいパラメータを使用して、ツールのフォーマットに依存しない、希望する出力のJSONスキーマを定義します。以前は、関数呼び出しを使用している場合、これを実現するのは困難でした。
+
+今回は後者を使用し、ストリーミングを加えてさらにレベルアップします。しかし、APIの出力がJSON形式の場合、どのようにテキストをストリーミングできるでしょうか？
 
 
 # Setting up Streaming
