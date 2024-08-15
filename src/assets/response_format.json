@@ -1,0 +1,63 @@
+{
+    "type": "json_schema",
+    "json_schema": {
+        "name": "message_response",
+        "strict": true,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": "The main text content of the response in markdown format."
+                },
+                "images": {
+                    "type": "array",
+                    "description": "List of images included in the response.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string",
+                                "description": "The URL of the image."
+                            },
+                            "alt": {
+                                "type": "string",
+                                "description": "The alt-text for the image."
+                            }
+                        },
+                        "required": ["url", "alt"],
+                        "additionalProperties": false
+                    }
+                },
+                "tools": {
+                    "type": "array",
+                    "description": "Tools invoked to generate the response.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "tool": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The name of the tool."
+                                    },
+                                    "output": {
+                                        "type": "string",
+                                        "description": "The output from tool in JSON string."
+                                    }
+                                },
+                                "required": ["name", "output"],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": ["tool"],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "required": ["message", "images", "tools"],
+            "additionalProperties": false
+        }
+    }
+}

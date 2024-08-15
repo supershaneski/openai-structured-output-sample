@@ -1,0 +1,20 @@
+{
+  "name": "openai-structured-output-sample",
+  "version": "1.0.0",
+  "description": "A sample Next.js project exploring Structured Output.",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "supershaneski",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^14.2.5",
+    "openai": "^4.55.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1"
+  }
+}

@@ -1,0 +1,43 @@
+* {
+  font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", cursive, sans-serif;
+  font-size: 1.1rem;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", cursive, sans-serif;
+  font-size: 1.1rem;
+  color: #550088;
+  background-color: #ebe4f4;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p > img {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+ol > li {
+  margin-top: 1rem;
+}
+ol {
+  margin-bottom: 1rem;
+}
+
+h3 {
+  margin-bottom: .5rem;
+  margin-top: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #fce;
+    background-color: #131313;
+  }
+}

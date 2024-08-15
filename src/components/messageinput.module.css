@@ -1,0 +1,35 @@
+.container {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 4rem);
+    box-sizing: border-box;
+    margin: 2rem;
+    z-index: 10;
+}
+.input {
+    background-color: #f4e4f499;
+    appearance: none;
+    border: 1px solid #a614a966;
+    border-radius: 5px;
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", cursive, sans-serif;
+    font-size: 1.2rem;
+    color: #880076;
+    padding: 1rem;
+    width: 100%;
+}
+.input::placeholder {
+    font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", cursive, sans-serif;
+    font-size: 1.2rem;
+    color: #d490d499;
+}
+
+@media (prefers-color-scheme: dark) {
+    .input {
+        background-color: #8373;
+        border: 1px solid #fde6;
+        color: #fde;
+    }
+    .input::placeholder {
+        color: #9488;
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "Get the weather forecast for a location on a given date.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "The name of city or place."
+                },
+                "date": {
+                    "type": "string",
+                    "description": "The date in YYYY-MM-DD format."
+                }
+            },
+            "required": ["location", "date"],
+            "additionalProperties": false
+        }
+    },
+    "strict": true
+}
