@@ -1,18 +1,19 @@
 openai-structured-output-sample
 ==========
 
-This is a sample application to demonstrate how to use [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) in **OpenAI Chat Completions API** _with streaming_, built using [Next.js](https://nextjs.org/docs).
+A sample application to demonstrate how to use [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) in **OpenAI Chat Completions API** _with streaming_, built using [Next.js](https://nextjs.org/docs).
 
 
 # Motivation
 
-There are two ways to use structured output in the API. 
+There are two ways to use structured output in the API:
 
-First one is by setting the output format based on tool schema. This is useful when we want the API to complete or supply the values for the fields in the tool.
+1. **Tool Schema**: Set the output format based on the tool's schema. This is useful when the API itself completes or provide values for specific fields.
 
-Second one is by setting the output format based on a new parameter called `response_format`, by supplying a JSON schema for how we want the output will be irregardless of the output format of the tools invoked. Previously, this is difficult to achieve if you are using tools. Now, with the new parameter, it becomes very easy.
+2. **Response Format**: Use the new `response_format` parameter to define a JSON schema for the desired output, independent of the tool's format. Previously, this is difficult to achieve if you are using function calling.
 
-The latter is what we will be doing. We will be upping the ante by using streaming. How can we stream the text displayed if the output from the API is in JSON format?
+We'll be doing the latter and up the ante with streaming. But how can we stream text if the API output is in JSON format?
+
 
 
 # Setting up Streaming
@@ -229,23 +230,23 @@ export function mockApiCall(name, args) {
 
   let data = {...args}
 
-    if(name === 'get_weather') {
+  if(name === 'get_weather') {
 
-      data.status = 'success'
+    data.status = 'success'
 
-      ...
+    ...
 
-    } else if(name === 'get_events') {
+  } else if(name === 'get_events') {
 
-      data.status = 'success'
-      data.events = []
+    data.status = 'success'
+    data.events = []
 
-      ...
+    ...
 
-    } else {
-      data.status = 'error',
-      data.message = `tool ${name} not found`
-    }
+  } else {
+    data.status = 'error',
+    data.message = `tool ${name} not found`
+  }
 
   return new Promise((resolve, reject) => {
       const delay = Math.floor(1000 * Math.random()) // simulate delay
@@ -344,7 +345,7 @@ As for the **tools**, one of the written [limitations of structured outputs](htt
 > Structured Outputs is not compatible with parallel function calls. When a parallel function call is generated, it may not match supplied schemas. Set parallel_tool_calls: false to disable parallel function calling.
 
 Parallel function call is when more than one tool is invoked. It can be the same tool or different tools.
-We will be using the **tools** parameter to circumvent the limitation.
+We will be using the **tools** parameter to [circumvent the limitation](#structured-outputs-for-parallel-function-calling).
 
 
 # Handling Function Calling in Server-Side
@@ -623,10 +624,94 @@ React.useEffect(() => {
 We immediately try to parse the return value and check if the object is valid and we can get the expected parameters for display.
 
 
-# Breaking the Limitation
+# Structured Outputs for Parallel Function Calling
 
+User inquiry:
+> what is the weather in sapporo this weekend?
 
+Structured Output:
+```javascript
+{
+    "message": "### Weather Forecast for Sapporo this Weekend\n\n- **Saturday, August 17, 2024**  \n  - **Forecast:** Rainy  \n  - **Temperature:** 24.7°C  \n  ![Sapporo - Live Camera](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg)\n\n- **Sunday, August 18, 2024**  \n  - **Forecast:** Cloudy  \n  - **Temperature:** 29.1°C  \n  ![Sapporo - Live Camera](https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/A_Normal_day_with_a_normal_life.jpg/640px-A_Normal_day_with_a_normal_life.jpg)  \n\nEnjoy your weekend!",
+    "images": [
+        {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg",
+            "alt": "Sapporo - Live Camera"
+        },
+        {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/A_Normal_day_with_a_normal_life.jpg/640px-A_Normal_day_with_a_normal_life.jpg",
+            "alt": "Sapporo - Live Camera"
+        }
+    ],
+    "tools": [
+        {
+            "tool": {
+                "name": "functions.get_weather",
+                "output": "{\"location\":\"Sapporo\",\"date\":\"2024-08-17\",\"status\":\"success\",\"forecast\":\"rainy\",\"temperature\":24.7,\"unit\":\"celsius\",\"image_data\":{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg\",\"alt\":\"Sapporo - Live Camera\"}}"
+            }
+        },
+        {
+            "tool": {
+                "name": "functions.get_weather",
+                "output": "{\"location\":\"Sapporo\",\"date\":\"2024-08-18\",\"status\":\"success\",\"forecast\":\"cloudy\",\"temperature\":29.1,\"unit\":\"celsius\",\"image_data\":{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/A_Normal_day_with_a_normal_life.jpg/640px-A_Normal_day_with_a_normal_life.jpg\",\"alt\":\"Sapporo - Live Camera\"}}"
+            }
+        }
+    ]
+}
+```
 
+As you can see, the **tools** parameter contains the tools invoked and its output.
+
+Let's try with more complex inquiry.
+
+User inquiry:
+> can you tell me the weather in tokyo and sapporo tomorrow? i will be staying in sapporo until sunday. i will be free around 5-7pm on saturday so can you tell me any interesting events i can catch up?
+
+Structured Output:
+```javascript
+{
+    "message": "### Weather Forecast for Tomorrow (August 16, 2024)\n\n- **Tokyo**:  \n  - **Condition**: Rainy  \n  - **Temperature**: 16°C  \n  ![Tokyo Weather](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg)\n\n- **Sapporo**:  \n  - **Condition**: Rainy  \n  - **Temperature**: 26.3°C  \n  ![Sapporo Weather](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg)\n\n### Events in Sapporo on Saturday Evening (August 17, 2024)\n\n- **Startup Pitch Night**  \n  - **Venue**: Citizen Hall  \n  - **Time**: 7:00 PM - 9:30 PM\n\n- **Food Truck Fiesta**  \n  - **Venue**: Seaside Park  \n  - **Time**: 10:30 AM - 7:30 PM  \n  (You can visit earlier in the day if you're interested!)\n\n- **Art Exhibition** (ends at 3:00 PM)  \n  - **Venue**: Modern Art Museum  \n  - **Time**: 9:00 AM - 3:00 PM  \n  ![Art Exhibition Poster](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/AL-NITAQ-Poster-2017-2.jpg/543px-AL-NITAQ-Poster-2017-2.jpg)\n\nMake sure to check the timings and enjoy your time in Sapporo!",
+    "images": [],
+    "tools": [
+        {
+            "tool": {
+                "name": "functions.get_weather",
+                "output": "{\"location\":\"Tokyo\",\"date\":\"2024-08-16\",\"status\":\"success\",\"forecast\":\"rainy\",\"temperature\":16,\"unit\":\"celsius\",\"image_data\":{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg\",\"alt\":\"Tokyo - Live Camera\"}}"
+            }
+        },
+        {
+            "tool": {
+                "name": "functions.get_weather",
+                "output": "{\"location\":\"Sapporo\",\"date\":\"2024-08-16\",\"status\":\"success\",\"forecast\":\"rainy\",\"temperature\":26.3,\"unit\":\"celsius\",\"image_data\":{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/2023_in_Amsterdam_city_-_people_arer_standing_or_walking_under_a_roof_hoo_of_Central_Station_facade._It_ia_a_grey_rainy_day._The_pavement_of_the_square_has_many_tram_tracks._Free_download_street_photography_by_Fons_Heijnsbroek%2C_CCO.tif/lossy-page1-640px-thumbnail.tif.jpg\",\"alt\":\"Sapporo - Live Camera\"}}"
+            }
+        },
+        {
+            "tool": {
+                "name": "functions.get_events",
+                "output": "{\"location\":\"Sapporo\",\"date\":\"2024-08-17\",\"status\":\"success\",\"events\":[{\"name\":\"Tech Conference 2024\",\"venue\":\"International Conference Hall\",\"time\":\"10:00AM - 5:00PM\"},{\"name\":\"Art Exhibition\",\"venue\":\"Modern Art Museum\",\"time\":\"9:00AM - 3:00PM\",\"poster\":{\"url\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/AL-NITAQ-Poster-2017-2.jpg/543px-AL-NITAQ-Poster-2017-2.jpg\",\"alt\":\"Art Fest\"}},{\"name\":\"Startup Pitch Night\",\"venue\":\"Citizen Hall\",\"time\":\"7:00PM - 9:30PM\"},{\"name\":\"Food Truck Fiesta\",\"venue\":\"Seaside Park\",\"time\":\"10:30AM - 7:30PM\"}]}}"
+            }
+        }
+    ]
+}
+```
+
+The **tools** parameter shows 3 tools invoked: 2 `get_weather` and 1 `get_events`.
+We added time condition for the events, however `get_events` tool only use **date** parameter for lookup in the mockup api.
+Even so, the API knew our condition and added notes to the events that takes place earlier in the day.
+
+```
+Events in Sapporo on Saturday Evening (August 17, 2024)
+Startup Pitch Night
+Venue: Citizen Hall
+Time: 7:00 PM - 9:30 PM
+Food Truck Fiesta
+Venue: Seaside Park
+Time: 10:30 AM - 7:30 PM
+(You can visit earlier in the day if you're interested!)
+Art Exhibition (ends at 3:00 PM)
+Venue: Modern Art Museum
+Time: 9:00 AM - 3:00 PM
+```
 
 
 # Setup
