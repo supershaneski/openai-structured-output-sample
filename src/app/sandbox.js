@@ -10,6 +10,8 @@ import { SimpleId, formatJSON } from '@/lib/utils'
 
 import classes from './sandbox.module.css'
 
+const MAX_TURN = 6
+
 export default function Sandbox() {
 
     const inputRef = React.useRef()
@@ -65,8 +67,10 @@ export default function Sandbox() {
 
         setLoading(true)
 
-        const context = messages.map((a) => ({ role:a.role, content:a.content }))
+        const context = messages.slice(-MAX_TURN).map((a) => ({ role:a.role, content:a.content }))
         
+        console.log(context)
+
         const user_message = {
             id: SimpleId(),
             created_at: Date.now(),
