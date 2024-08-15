@@ -10,7 +10,7 @@ import { SimpleId, formatJSON } from '@/lib/utils'
 
 import classes from './sandbox.module.css'
 
-const MAX_TURN = 6
+const MAX_TURN = 16
 
 export default function Sandbox() {
 

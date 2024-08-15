@@ -8,6 +8,8 @@ export async function POST(request) {
     
     let { message, context } = await request.json()
 
+    console.log('message', message)
+
     let system_prompt = `You are a helpful assistant.\n` +
         `Today is ${new Date()}.`
 
