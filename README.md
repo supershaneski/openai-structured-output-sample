@@ -27,6 +27,16 @@ APIでStructured Outputを使用する方法は2つあります：
 
 今回は後者を使用し、ストリーミングを加えてさらにレベルアップします。しかし、APIの出力がJSON形式の場合、どのようにテキストをストリーミングできるでしょうか？
 
+# Screenshot
+
+Prompt:
+> will it rain tomorrow in tokyo?
+
+<picture>
+ <source media="(prefers-color-scheme: dark)" srcset="./docs/screenshot-dark.png">
+ <source media="(prefers-color-scheme: light)" srcset="./docs/screenshot-light.png">
+ <img alt="Sample Screenshot" src="./docs/screenshot-light.png">
+</picture>
 
 # Setting up Streaming
 
