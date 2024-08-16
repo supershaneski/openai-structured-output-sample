@@ -1,11 +1,11 @@
 openai-structured-output-sample
 ==========
 
-A sample application to demonstrate how to use [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) in **OpenAI Chat Completions API** _with streaming_, built using [Next.js](https://nextjs.org/docs).
+A sample application to demonstrate how to use [Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/) in **OpenAI Chat Completions API** with streaming, built using **Next.js**.
 
 ---
 
-**OpenAI Chat Completions API**でストリーミングを使用した[Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/)の利用方法を示すサンプルアプリケーション。[Next.js](https://nextjs.org/docs)で構築されています。
+**OpenAI Chat Completions API**でストリーミングを使用した[Structured Outputs](https://openai.com/index/introducing-structured-outputs-in-the-api/)の使い方を示すサンプルアプリケーション。**Next.js**で構築されています。
 
 # Motivation
 
