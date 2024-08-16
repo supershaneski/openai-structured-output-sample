@@ -106,7 +106,7 @@ export async function POST(request) {
                         tools: tools,
                         response_format: response_format,
                         stream: true,
-                        temperature: 0.2,
+                        temperature: 0.9,//0.2
                     })
 
                     for await (const chunk of stream) {
